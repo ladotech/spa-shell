@@ -40,6 +40,8 @@ chmod +x spa
 
 ### Rolling
 
+Rolling logs file `logs/console.log` and `logs/error.log` by time. This operation will be also executed when app start, but you can run it with `rolling` command at anytime.
+
 ```shell
 ./spa your-app.jar rolling
 ```
