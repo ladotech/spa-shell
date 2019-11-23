@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# shell for spring boot application
+
+# JAR
+APP_JAR=$1
+PID_FILE=${APP_JAR}.pid
+
+# logs
+LOG_FOLDER="logs"
+CONSOLE_LOG=${LOG_FOLDER}/console.log
+ERROR_LOG=${LOG_FOLDER}/error.log
+
+# auto make log folder
+if [ ! -d "${LOG_FOLDER}" ]; then
+    mkdir ${LOG_FOLDER}
+fi
+
+# Usage
+usage() {
+    echo "Usage: spa [JAR_FILE] [start|stop|restart|status|rolling]"
+    echo "Example:"
+    echo "  Put this shell as 'spa' into the same folder of 'spring-boot-application.jar' and 'application.properties'."
+    echo "  You can start app with:"
+    echo "./spa spring-boot-application.jar start"
+    exit 1
+}
+
+# Check is running
+is_running(){
+    if [ ! -f "$PID_FILE" ]; then
+        return 1
+    else
+        FILE_PID=`cat ${PID_FILE}`
+        PID=$(ps -ef |grep ${FILE_PID} | grep -v grep |awk '{print $2}')
+        # -z "${pid}" check pid, return 0 if it is OK
+        if [ -z "${PID}" ]; then
+            # no pid, return 1
+            return 1
+        else
+            # ok return 0
+            return 0
+        fi
+    fi
+}
+
+# Start app
+start(){
+    is_running
+    if [ $? -eq "0" ]; then
+        echo "The app ${APP_JAR} is already running, PID=${PID}"
+    else
+        rolling
+        nohup java -jar ${APP_JAR} --spring.config.location=application.properties >${CONSOLE_LOG} 2>${ERROR_LOG} &
+        PID=$(echo $!)
+        echo ${PID} > ${PID_FILE}
+        echo "The app ${APP_JAR} start successfully, PID=$PID"
+    fi
+}
+
+# Stop app
+stop(){
+    is_running
+    if [ $? -eq "0" ]; then
+        kill -15 ${PID}
+        rm -f ${PID_FILE}
+        echo "The app ${APP_JAR} process stopped, PID=${PID}"
+    else    
+        echo "The app ${APP_JAR} is not running."
+    fi
+}
+
+# Restart
+restart(){
+    stop
+    start
+}
+
+# Status
+status(){
+    is_running
+    if [ $? -eq "0" ]; then
+        echo "The app ${APP_JAR} is running, PID=${PID}"
+    else    
+        echo "The app ${APP_JAR} is not running"
+    fi
+}
+
+# Rolling log
+rolling(){
+    CURRENT_DATE=`date +%Y-%m-%d_%H-%M-%S`
+    
+    if [ -f "${CONSOLE_LOG}" ]; then
+        ROLLING_LOG=${CONSOLE_LOG}_${CURRENT_DATE}
+        cp ${CONSOLE_LOG} ${ROLLING_LOG}
+        cat /dev/null > ${CONSOLE_LOG}
+    fi
+    
+    if [ -f "${ERROR_LOG}" ]; then
+        ROLLING_ERROR_LOG=${ERROR_LOG}_${CURRENT_DATE}
+        cp ${ERROR_LOG} ${ROLLING_ERROR_LOG}
+        cat /dev/null > ${ERROR_LOG}
+    fi
+}
+
+case $2 in
+    "start")
+        start
+        ;;
+    "stop")
+        stop
+        ;;
+    "restart")
+        restart
+        ;;
+    "status")
+        status
+        ;;
+    "rolling")
+        rolling
+        ;;
+        *)
+        usage
+        ;;
+esac
+exit 0
