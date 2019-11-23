@@ -1,5 +1,6 @@
 # Spring Boot Application Shell
-Shell script for management of Spring Boot Application
+
+Shell script for management of Spring Boot Application.
 
 ## Usage
 
@@ -13,6 +14,8 @@ cd /path/to/your/app
 wget https://github.com/ladotech/spa-shell/releases/download/0.1/spa
 chmod +x spa
 ```
+
+You can edit it with `vi spa` to change something.
 
 ### Start
 
@@ -32,7 +35,7 @@ Stop app if it is running.
 
 ### Restart
 
-This operation will stop app first, if the app is running. Otherwhise, just same as `start` command.
+This operation will stop app first, if the app is running. Otherwise, just same as `start` command.
 
 ```shell
 ./spa your-app.jar restart
