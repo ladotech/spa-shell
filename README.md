@@ -16,11 +16,15 @@ chmod +x spa
 
 ### Start
 
+Start app if it is not running.
+
 ```shell
 ./spa your-app.jar start
 ```
 
 ### Stop
+
+Stop app if it is running.
 
 ```shell
 ./spa your-app.jar stop
@@ -28,11 +32,15 @@ chmod +x spa
 
 ### Restart
 
+This operation will stop app first, if the app is running. Otherwhise, just same as `start` command.
+
 ```shell
 ./spa your-app.jar restart
 ```
 
 ### Status
+
+Show if the app is running.
 
 ```shell
 ./spa your-app.jar status
@@ -40,7 +48,7 @@ chmod +x spa
 
 ### Rolling
 
-Rolling logs file `logs/console.log` and `logs/error.log` by time. This operation will be also executed when app start, but you can run it with `rolling` command at anytime.
+Rolling logs file `logs/console.log` and `logs/error.log` by time. This operation will be also executed when the app starts, but you can run it with `rolling` command at anytime you want.
 
 ```shell
 ./spa your-app.jar rolling
