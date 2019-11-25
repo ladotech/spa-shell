@@ -67,15 +67,15 @@ stop(){
         WAITING_KILLED=1
         for i in {1..99}; do
             is_running
-            if [ $? -eq "1" ]; then
+            if [ $? -eq "0" ]; then
                 echo -n "."
                 sleep 1
             else
                 WAITING_KILLED=0
             fi
         done
-        if [ WAITING_KILLED -eq "1" ]; then
-            echo "Fail to stop process ${PID}"
+        if [ WAITING_KILLED = 1 ]; then
+            echo "Failed"
         else
             echo "Stopped."
             rm -f ${PID_FILE}
