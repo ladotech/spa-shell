@@ -8,10 +8,12 @@ Shell script for management of Spring Boot Application.
 
 ```shell
 cd /path/to/your/app
-# `ls` will be:
-# - your-app.jar
-# - application.properties
-wget https://github.com/ladotech/spa-shell/releases/download/0.1/spa
+## `ls` will be:
+## - your-app.jar
+## - application.properties
+wget https://github.com/ladotech/spa-shell/releases/download/0.2/spa
+## or use newest
+# wget https://raw.githubusercontent.com/ladotech/spa-shell/master/spa
 chmod +x spa
 ```
 
