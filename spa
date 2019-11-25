@@ -62,9 +62,24 @@ start(){
 stop(){
     is_running
     if [ $? -eq "0" ]; then
+        echo "The app ${APP_JAR} process stopping, PID=${PID}"
         kill -15 ${PID}
-        rm -f ${PID_FILE}
-        echo "The app ${APP_JAR} process stopped, PID=${PID}"
+        WAITING_KILLED=1
+        for i in {1..99}; do
+            is_running
+            if [ $? -eq "1" ]; then
+                echo -n "."
+                sleep 1
+            else
+                WAITING_KILLED=0
+            fi
+        done
+        if [ WAITING_KILLED -eq "1" ]; then
+            echo "Fail to stop process ${PID}"
+        else
+            echo "Stopped."
+            rm -f ${PID_FILE}
+        fi 
     else    
         echo "The app ${APP_JAR} is not running."
     fi
