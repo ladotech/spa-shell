@@ -11,9 +11,9 @@ cd /path/to/your/app
 ## `ls` will be:
 ## - your-app.jar
 ## - application.properties
-wget https://github.com/ladotech/spa-shell/releases/download/0.2/spa
-## or use newest
-# wget https://raw.githubusercontent.com/ladotech/spa-shell/master/spa
+
+## use newest
+wget https://gitlab.com/ladotech/spa-shell/raw/master/spa
 chmod +x spa
 ```
 
